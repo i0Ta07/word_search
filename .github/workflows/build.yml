@@ -64,13 +64,18 @@ jobs:
 
       - name: Accept Android SDK Licenses
         run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
-
-      - name: Install Android SDK build tools
+      
+      - name: Setup Android SDK and Accept Licenses
         run: |
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
-            "platforms;android-30" \
-            "build-tools;36.0.0" \
-            "ndk;25.1.8937393"
+          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "PATH=$PATH:$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools" >> $GITHUB_ENV
+          mkdir -p $HOME/android-sdk/cmdline-tools
+          cd $HOME/android-sdk/cmdline-tools
+          curl -O https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip -q commandlinetools-linux-*.zip -d latest
+          yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk --licenses
+          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platforms;android-30" "build-tools;36.0.0" "ndk;25.1.8937393"
+
 
       - name: Build APK
         run: |

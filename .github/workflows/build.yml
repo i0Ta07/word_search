@@ -8,9 +8,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
       ANDROID_SDK_ROOT: $HOME/android-sdk
-      PATH: $HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH
+      ANDROID_HOME: $HOME/android-sdk
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -18,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y curl unzip ...
+          sudo apt-get install -y curl unzip build-essential git python3 python3-pip python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good libsqlite3-dev sqlite3 bzip2 libbz2-dev libssl-dev openssl libgdbm-dev libgdbm-compat-dev liblzma-dev libreadline-dev libncurses-dev libffi-dev uuid-dev
 
       - name: Install Python packages
         run: |
@@ -33,12 +32,17 @@ jobs:
           unzip -q commandlinetools-linux-*.zip
           mv cmdline-tools latest
 
+      - name: Setup PATH for Android SDK tools
+        run: |
+          echo "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          echo "$ANDROID_SDK_ROOT/platform-tools" >> $GITHUB_PATH
+
       - name: Accept Android SDK Licenses
         run: yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses
 
       - name: Install required SDK packages
         run: |
-          sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platforms;android-30" "build-tools;36.0.0" "ndk;25.1.8937393"
+          sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-30" "build-tools;36.0.0" "ndk;25.1.8937393"
 
       - name: Build APK
         run: buildozer android debug

@@ -1,0 +1,209 @@
+<RootWidget>:
+    id: root_box
+    orientation: 'vertical'
+    spacing: 15
+    padding: 10
+    
+    BoxLayout:
+        spacing: 20
+        size_hint_y: None
+        height: 100
+    
+        Button:
+            id: clear_cache_button
+            on_press: root.clear_cache()
+            size_hint: 0.06, 0.5
+            pos_hint: {'left': 1, 'center_y': 0.3}
+            background_color:0,0,0,0
+            
+
+            Image:
+                id:clear_cache_icon
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+                size_hint: None, None
+                size: 60, 60
+
+        Button:
+            id: download_button
+            on_press: root.download_file()
+            size_hint: 0.06, 0.5
+            pos_hint: {'left': 1, 'center_y': 0.3}
+            background_color:0,0,0,0
+            
+
+            Image:
+                id:download_icon
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+                size_hint: None, None
+                size: 60, 60
+
+        Label:
+            id: book_label
+            text: root.get_last_book_name()
+            halign: 'center'
+            valign: 'middle'
+            font_size: '45'
+            font_name: 'Roboto-Bold'  
+            color: 0.9, 0.9, 0.95, 1  
+            size_hint: 1, None
+            pos_hint: {"center_x": 0.5, "center_y": 0.3} 
+            height: 80
+
+        Button:
+            id: current_theme_button
+            size_hint: 0.06, 0.5
+            background_color:0,0,0,0
+            on_press: root.toggle_theme()
+            pos_hint: {'x': 1, 'center_y': 0.3}
+
+            Image:
+                id: current_theme_icon
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+                size_hint: None, None
+                size: 60, 60
+
+
+
+        Button:
+            id: help_button
+            size_hint: 0.06, 0.5
+            background_color:0,0,0,0
+            on_press: root.show_user_manual()
+            pos_hint: {'right': 1, 'center_y': 0.3}
+
+            Image:
+                id: help_icon
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+                size_hint: None, None
+                size: 50, 50
+
+    BoxLayout:
+        size_hint: None, None
+        width: self.minimum_width
+        height: 50
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        spacing: 10
+        padding: [5, 0, 5, 0] # [left, top, right, bottom]
+
+        TextInput:
+            id: entry
+            hint_text: "Enter word to search"
+            multiline: False
+            size_hint_x: None
+            hint_text_color: (0.5, 0.5, 0.5, 1)
+            width: 600 
+            font_size: 25
+            focus: True 
+            font_name: 'Roboto-Bold' 
+            background_color: (0.145, 0.145, 0.145, 1)
+            foreground_color: 1, 1, 1, 1
+            padding: [10, 10]
+            
+
+        Button:
+            text: "Search"
+            id: search_button
+            size_hint_x: None
+            width: 100
+            font_size: 22
+            background_color: 0,0,0,0
+            color: 1, 1, 1, 1
+            bold: True
+            on_press: root.search_word()
+            canvas.before:
+                Color:
+                    rgba:  (0.125, 0.427, 0.196, 1)
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [10]
+
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: None
+        height: self.minimum_height
+        padding: [10, 0, 10, 10]  # [left, top, right, bottom]
+
+        TextInput:
+            id: output_box
+            readonly: True
+            size_hint_y: None
+            height: 650
+            size_hint_x: 1
+            font_size: 25
+            background_color: 0.12, 0.12, 0.12, 1
+            foreground_color: 1, 1, 1, 1
+            padding: [15, 10, 15, 10]
+            cursor_color: 0, 0, 0, 0
+            multiline: True
+            text_validate_unfocus: False
+
+
+    FloatLayout:
+        size_hint_y: None
+        height: 60
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: None, None
+            height: 60
+            width: 420  # Label (200) + spacing + Button (200) + a bit extra
+            pos_hint: {'x': 0.01, 'center_y': 0.6}  # small padding from left
+
+            Label:
+                text: "User Proficiency"
+                id: proficiency_label
+                font_size: '25'
+                font_name: 'Roboto-Bold'
+                color: 0.9, 0.9, 0.95, 1
+                size_hint: None, None
+                size: 200, 60
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+
+            Button:
+                id: proficiency_level
+                text: 'Medium'
+                size_hint: None, None
+                font_name: 'Roboto-Bold'
+                size: 180, 40
+                pos_hint: {'left': 1, 'center_y': 0.5}
+                font_size: 22
+                background_normal: ''
+                background_color: 0, 0, 0, 0
+                color: 1, 1, 1, 1
+                canvas.before:
+                    Color:
+                        rgba: (0.2, 0.4, 0.9, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [10]
+
+        Button:
+            text: "Upload PDF"
+            id: upload_button
+            font_name: 'Roboto-Bold'
+            size_hint: None, None
+            size: 200, 50
+            font_size: 25
+            background_normal: ''
+            background_down: ''
+            pos_hint: {'right': 1, 'center_y': 0.6}
+            background_color: 0, 0, 0, 0
+            color: 1, 1, 1, 1
+            on_press: root.select_pdf()
+            canvas.before:
+                Color:
+                    rgba: (0.2, 0.4, 0.9, 1)
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [10]
+

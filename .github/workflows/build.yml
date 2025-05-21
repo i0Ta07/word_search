@@ -3,56 +3,22 @@ name: Build Kivy APK
 on:
   push:
     branches: [ main ]
-
+    
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      ANDROID_HOME: /path/to/android-sdk  # Set your actual SDK path here
+      ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
+      ANDROID_SDK_ROOT: $HOME/android-sdk
+      PATH: $HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH
     steps:
-      - name: Accept Android SDK licenses
-        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            build-essential \
-            git \
-            python3 \
-            python3-pip \
-            python3-dev \
-            ffmpeg \
-            libsdl2-dev \
-            libsdl2-image-dev \
-            libsdl2-mixer-dev \
-            libsdl2-ttf-dev \
-            libportmidi-dev \
-            libswscale-dev \
-            libavformat-dev \
-            libavcodec-dev \
-            zlib1g-dev \
-            libgstreamer1.0-0 \
-            gstreamer1.0-plugins-base \
-            gstreamer1.0-plugins-good \
-            libsqlite3-dev \
-            sqlite3 \
-            bzip2 \
-            libbz2-dev \
-            libssl-dev \
-            openssl \
-            libgdbm-dev \
-            libgdbm-compat-dev \
-            liblzma-dev \
-            libreadline-dev \
-            libncurses-dev \
-            libffi-dev \
-            uuid-dev \
-            curl \
-            unzip
+          sudo apt-get install -y curl unzip ...
 
       - name: Install Python packages
         run: |
@@ -61,31 +27,21 @@ jobs:
 
       - name: Install Android cmdline-tools
         run: |
-          mkdir -p ${ANDROID_HOME}/cmdline-tools
-          cd ${ANDROID_HOME}/cmdline-tools
-          curl -O https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-          unzip commandlinetools-linux-*.zip -d latest
-
-      - name: Accept Android SDK Licenses
-        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
-      
-      - name: Setup Android SDK and Accept Licenses
-        run: |
-          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
-          echo "PATH=$PATH:$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools" >> $GITHUB_ENV
-          mkdir -p $HOME/android-sdk/cmdline-tools
-          cd $HOME/android-sdk/cmdline-tools
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+          cd $ANDROID_SDK_ROOT/cmdline-tools
           curl -O https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
           unzip -q commandlinetools-linux-*.zip
           mv cmdline-tools latest
-          yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk --licenses
-          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platforms;android-30" "build-tools;36.0.0" "ndk;25.1.8937393"
 
+      - name: Accept Android SDK Licenses
+        run: yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses
 
+      - name: Install required SDK packages
+        run: |
+          sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platforms;android-30" "build-tools;36.0.0" "ndk;25.1.8937393"
 
       - name: Build APK
-        run: |
-          buildozer android debug
+        run: buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

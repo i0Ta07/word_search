@@ -7,8 +7,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    env:
+      ANDROID_HOME: /path/to/android-sdk  # Set your actual SDK path here
     steps:
+      - name: Accept Android SDK licenses
+        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 

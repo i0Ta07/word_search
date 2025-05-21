@@ -46,7 +46,9 @@ jobs:
             libreadline-dev \
             libncurses-dev \
             libffi-dev \
-            uuid-dev
+            uuid-dev \
+            curl \
+            unzip
 
       - name: Install Python packages
         run: |
@@ -60,7 +62,6 @@ jobs:
           curl -O https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
           unzip commandlinetools-linux-*.zip -d latest
 
-
       - name: Accept Android SDK Licenses
         run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
 
@@ -68,12 +69,12 @@ jobs:
         run: |
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
             "platforms;android-30" \
-            "build-tools;36.0.0"
+            "build-tools;36.0.0" \
+            "ndk;25.1.8937393"
 
-      - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        with:
-          command: buildozer android debug
+      - name: Build APK
+        run: |
+          buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

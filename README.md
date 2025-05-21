@@ -49,4 +49,4 @@ Perfect for language learners and avid readers, Smart PDF Word Analyzer boosts v
 ## 👨‍💻 From the Developer
 
 The original goal was to build this as an Android app, but I ran into persistent issues with Buildozer that I couldn’t resolve. I’m sharing this project publicly in the hope that someone else might pick it up and succeed where I couldn’t.  
-**Trust me — this cost me a lot of precious time and sanity.**
+**Trust me — this cost me a lot of precious time and sanity, feel free to contribute or fork!**

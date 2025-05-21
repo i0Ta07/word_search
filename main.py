@@ -13,6 +13,7 @@ from kivy.graphics import Color, Rectangle
 from kivy.resources import resource_find
 from kivy.app import App
 from kivy.resources import resource_find
+from kivy.lang import Builder
 
 
 kivy.require('1.9.0')
@@ -255,6 +256,7 @@ class RootWidget(BoxLayout):
 class WordSearchApp(App):
 
     def build(self):
+        Builder.load_file('wordsearchapp.kv')  # or load_string if using string
         self.root_widget = RootWidget()  # save root widget instance
         return self.root_widget
     

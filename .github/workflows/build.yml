@@ -53,9 +53,27 @@ jobs:
           python3 -m pip install --upgrade pip
           pip install cython==0.29.19 buildozer
 
-      - name: Build APK
+      - name: Install Android cmdline-tools
         run: |
-          buildozer android debug
+          mkdir -p ${ANDROID_HOME}/cmdline-tools
+          cd ${ANDROID_HOME}/cmdline-tools
+          curl -O https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip commandlinetools-linux-*.zip -d latest
+
+
+      - name: Accept Android SDK Licenses
+        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+
+      - name: Install Android SDK build tools
+        run: |
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+            "platforms;android-30" \
+            "build-tools;36.0.0"
+
+      - name: Build with Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        with:
+          command: buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

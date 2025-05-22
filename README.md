@@ -59,3 +59,14 @@ Contributions, bug reports, and feature requests are welcome! Please open issues
 
 ---
 
+
+## 🔽 Download the Application
+
+You can download the latest release of the **Smart PDF Word Analyzer** from the link below:
+
+[📦 Download Application (.rar) - Google Drive](https://drive.google.com/drive/folders/1JwQyfh3aH2QDaz5jHnjBCVg5MwlTaRov?usp=sharing)
+
+> ⚠️ Make sure to extract the `.rar` file using appropriate software (e.g., WinRAR or 7-Zip) and follow the user manual provided inside.
+
+---
+

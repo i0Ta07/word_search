@@ -227,7 +227,7 @@ class RootWidget(BoxLayout):
                 bold=True
             )
             btn.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
-            btn.bind(on_release=lambda btn: self.apply_selected_suggestion(btn.text))
+            btn.bind(on_release=lambda btn, word=word: self.apply_selected_suggestion(word))
             self.suggestion_dropdown.add_widget(btn)
             self.suggestion_buttons.append(btn)
 

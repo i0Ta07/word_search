@@ -338,10 +338,11 @@ def show_user_manual(output_box):
         "5. Click trash button on top left corner to clear previously analyzed data \n"
         "6. Click on theme button to toggle between themes to reduce eye strain.\n"
         "7. Your common word list grows smarter based on your interactions.\n"
-        "8. Internet is only required during PDF upload for fetching word meanings.\n"
-        "    Once processed, everything works offline for distraction-free reading.\n"
+        "8. Internet is only required during PDF upload for fetching word meanings.Once processed, everything works offline for distraction-free reading.\n"
         "9. For best results, use clean, text-based PDFs (not scanned images or pictures).\n"
         "10. Each new upload replaces previous analysis—only one book is active at a time.\n"
+        "11. The app is built for Windows, not Android. However, it provides a downloadable, lightweight PDF containing all definitions, which you can open on any Android device and easily search for words within."
+
         f"\n\n{' ' * 15}Tip: Use this app for focused, offline reading without digital distractions."
     )
     output_box.text = help_text
@@ -359,14 +360,19 @@ def clear_cache(output_box,book_label):
             dst_path = os.path.join(app_dir, "common_words.txt")
             definitions_path = os.path.join(app_dir, "difficult_words_definitions.txt")
 
-            with open(src_path, "r", encoding="utf-8") as src, \
-                 open(dst_path, "w", encoding="utf-8") as dst:
-                dst.write(src.read())
+            if book_label.text == "No book loaded":
+                output_box.text = "No book loaded.\nNothing to clear."
+            elif os.path.exists(definitions_path) and os.path.getsize(definitions_path) == 0:
+                output_box.text = "Definitions file is already empty."
+            else:
+                with open(src_path, "r", encoding="utf-8") as src, \
+                    open(dst_path, "w", encoding="utf-8") as dst:
+                    dst.write(src.read())
 
-            # Clear definitions file
-            open(definitions_path, "w", encoding="utf-8").close()
-            output_box.text = "Cache cleared.\ncommon_words.txt reset.\nDefinitions emptied."
-            book_label.text = "No book loaded"
+                # Clear definitions file
+                open(definitions_path, "w", encoding="utf-8").close()
+                output_box.text = "Cache cleared.\ncommon_words.txt reset.\nDefinitions emptied."
+                book_label.text = "No book loaded"
         except Exception as e:
             output_box.text = f"Failed to clear cache:\n{e}"
         popup.dismiss()
@@ -418,6 +424,9 @@ def txt_to_pdf(txt_path, pdf_path):
     with open(txt_path, "r", encoding="utf-8") as file:
         lines = file.readlines()
 
+    if not any(line.strip() for line in lines):
+        raise ValueError("Text file is empty. PDF will not be created.")
+
     c = canvas.Canvas(pdf_path, pagesize=A4)
     width, height = A4
     margin = 40
@@ -449,11 +458,20 @@ def get_download_path(filename):
         os.makedirs(download_dir)
     return os.path.join(download_dir, filename)
 
-def download_file(output_box, txt_path=None, filename="difficult_words_definitions.pdf"):
+def download_file(output_box, book_label):
     app_dir = App.get_running_app().user_data_dir
-    if txt_path is None:
-        txt_path = os.path.join(app_dir, "difficult_words_definitions.txt")
+    txt_path = os.path.join(app_dir, "difficult_words_definitions.txt")
+
+    # Sanitize and format the PDF filename using book_label
+    safe_label = "".join(c if c.isalnum() or c in (' ', '_', '-') else "_" for c in book_label.text).strip().replace(" ", "_")
+    filename = f"{safe_label}_difficult_words_definitions.pdf"
     pdf_path = get_download_path(filename)
-    txt_to_pdf(txt_path, pdf_path)
-    output_box.text = f"PDF saved at {pdf_path}"
+    try:
+        txt_to_pdf(txt_path, pdf_path)
+        output_box.text = f"PDF saved at {pdf_path}"
+    except ValueError as e:
+        output_box.text = str(e)
+    except Exception as e:
+        output_box.text(f"An unexpected error occurred: {e}")
+    
 

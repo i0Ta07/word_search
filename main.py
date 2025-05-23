@@ -250,7 +250,7 @@ class RootWidget(BoxLayout):
                 print("Source common_words.txt not found in assets!")
 
     def download_file(self):
-        return ws.download_file(self.ids.output_box)
+        return ws.download_file(self.ids.output_box,self.ids.book_label)
 
 
 class WordSearchApp(App):
@@ -262,6 +262,11 @@ class WordSearchApp(App):
     
     def on_start(self):
         self.root_widget.copy_common_words_if_missing()  # now this works
+        if self.root.ids.book_label.text == "No book loaded":
+            self.root.ids.output_box.text = (
+                "> Please upload a book file to begin.\n"
+                "> For more information, click the question mark icon on the top-right corner."
+            )
 
 
 if __name__ == '__main__':

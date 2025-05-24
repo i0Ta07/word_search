@@ -59,4 +59,42 @@ Contributions, bug reports, and feature requests are welcome! Please open issues
 
 ---
 
+## Installation
+
+1. **Create a virtual environment** (optional but recommended):
+
+   ```bash
+   python -m venv venv
+   
+2. **Activate virtual environment**:
+   ```bash
+   .\venv\Scripts\Activate.ps1
+   
+3. **Install dependencies**
+
+   Before running the application, install all required Python packages:
+
+   ```bash
+   pip install -r requirements.txt
+
+4. **Run main.py**
+
+   ```bash
+    python main.py
+
+---
+
+## Building the Executable (Windows)
+
+To create a standalone `.exe` file, follow the steps below. This will ensure all required assets including the `wordfreq` data and `.kv` file are bundled into the executable.
+
+### 1. Install PyInstaller
+
+  If it's not already installed, run:
+    
+  ```bash
+  pip install pyinstaller
+
+
+
 

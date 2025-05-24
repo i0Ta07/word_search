@@ -5,10 +5,6 @@ import difflib
 import os
 import sys
 
-
-
-
-
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from collections import Counter
@@ -151,7 +147,7 @@ def identify_difficult_words(cleaned_words,word_frequency_dict, local_limit,
                 difficult_words[cleaned_word] = definition
         else:
             # Failed local → check global rank
-            global_freq = word_frequency(cleaned_word, 'en')
+            global_freq = word_frequency(cleaned_word, 'en', wordlist='large', minimum=0.0)
             if global_freq < global_freq_limit:
                 # Word is globally rare → accept
                 definition = get_word_definition(cleaned_word, definition_cache)
@@ -242,7 +238,6 @@ def load_word_definitions(file_path="difficult_words_definitions.txt"):
     return word_definitions
 
 
-
 def open_filechooser(upload_callback):
     content = FileChooserListView(filters=["*.pdf"])
     popup = Popup(title="Select PDF file", content=content, size_hint=(0.9, 0.9))
@@ -313,7 +308,6 @@ def upload_and_process_pdf(proficiency_level,pdf_path, output_box, book_label):
         book_label.text = "Failed to load book"
         output_box.text = f"Error processing PDF:\n{e}"
         
-
 
 def show_user_manual(output_box):
     help_text = (
@@ -447,6 +441,7 @@ def get_download_path(filename):
     if not os.path.exists(download_dir):
         os.makedirs(download_dir)
     return os.path.join(download_dir, filename)
+
 
 def download_file(output_box, book_label):
     app_dir = App.get_running_app().user_data_dir

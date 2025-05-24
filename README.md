@@ -109,11 +109,14 @@ To create a standalone `.exe` file, follow the steps below. This will ensure all
    
       ```bash
       pyinstaller --onefile --windowed `
-     --add-data "assets;assets" `
-     --add-data "assets/wordfreq/data/large_en.msgpack.gz;wordfreq/data" `
-     --add-data "wordsearchapp.kv;." `
-     --hidden-import=win32timezone `
-     --hidden-import=pywintypes `
-     main.py
+        --name WordSearchApp `
+        --icon "assets/app_icon.ico" `
+        --add-data "assets;assets" `
+        --add-data "assets/wordfreq/data/large_en.msgpack.gz;wordfreq/data" `
+        --add-data "wordsearchapp.kv;." `
+        --hidden-import=win32timezone `
+        --hidden-import=pywintypes `
+        main.py
+
 
 3. After the build completes, your .exe file will be located in the dist/ directory:

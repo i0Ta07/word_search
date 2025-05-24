@@ -2,6 +2,7 @@ import os
 import shutil
 import kivy
 import assets.word_search as ws
+import nltk
 
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -253,6 +254,38 @@ class RootWidget(BoxLayout):
         return ws.download_file(self.ids.output_box,self.ids.book_label)
 
 
+# Get from Appdata/Roaming
+# def ensure_nltk_data():
+#     resources = {
+#         "tokenizers/punkt": "punkt",
+#         "tokenizers/punkt_tab": "punkt_tab",
+#         "corpora/wordnet": "wordnet",
+#         "corpora/omw-1.4": "omw-1.4"
+#     }
+#     for resource_path, package_name in resources.items():
+#         try:
+#             nltk.data.find(resource_path)
+#         except LookupError:
+#             nltk.download(package_name)
+
+
+def setup_nltk_path():
+    base_path = os.path.abspath("assets/nltk_data")
+    if os.path.exists(base_path):
+        nltk.data.path.insert(0, base_path)
+        print(f"NLTK data path set to: {base_path}")
+    else:
+        print(f"NLTK data folder not found at {base_path}, fallback to downloads")
+        os.makedirs(base_path, exist_ok=True)  # create if missing
+        nltk.download("punkt", download_dir=base_path)
+        nltk.download("wordnet", download_dir=base_path)
+        nltk.download("omw-1.4", download_dir=base_path)
+        nltk.download("punkt_tab", download_dir=base_path)
+        nltk.data.path.insert(0, base_path)  # add after download too
+        print(f"NLTK data downloaded and path set to: {base_path}")
+
+
+
 class WordSearchApp(App):
 
     def build(self):
@@ -261,7 +294,9 @@ class WordSearchApp(App):
         return self.root_widget
     
     def on_start(self):
-        self.root_widget.copy_common_words_if_missing()  # now this works
+        self.root.copy_common_words_if_missing()
+        setup_nltk_path()
+
         if self.root.ids.book_label.text == "No book loaded":
             self.root.ids.output_box.text = (
                 "> Please upload a book file to begin.\n"

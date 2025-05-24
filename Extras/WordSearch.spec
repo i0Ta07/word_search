@@ -1,5 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
-
+# Exe Spec file 
 
 a = Analysis(
     ['main.py'],
@@ -22,7 +22,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='WordSearchApp',
+    name='WordSearch',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

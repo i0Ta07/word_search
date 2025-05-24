@@ -59,25 +59,33 @@ Contributions, bug reports, and feature requests are welcome! Please open issues
 
 ---
 
-## Installation
 
-1. **Create a virtual environment** (optional but recommended):
+## 🚀 Installation
+
+1. Clone the Repository
+
+      ```bash
+      git clone https://github.com/i0Ta07/word_search
+      cd word_search
+
+2. **Create a virtual environment** (optional but recommended):
 
    ```bash
    python -m venv venv
    
-2. **Activate virtual environment**:
+3. **Activate virtual environment**:
+   
    ```bash
    .\venv\Scripts\Activate.ps1
    
-3. **Install dependencies**
+4. **Install dependencies**
 
    Before running the application, install all required Python packages:
 
    ```bash
    pip install -r requirements.txt
 
-4. **Run main.py**
+5. **Run main.py**
 
    ```bash
     python main.py
@@ -88,13 +96,24 @@ Contributions, bug reports, and feature requests are welcome! Please open issues
 
 To create a standalone `.exe` file, follow the steps below. This will ensure all required assets including the `wordfreq` data and `.kv` file are bundled into the executable.
 
-### 1. Install PyInstaller
+1. Install PyInstaller
 
-  If it's not already installed, run:
-    
-  ```bash
-  pip install pyinstaller
+   If it's not already installed, run:
+ 
+   ```bash
+   pip install pyinstaller
 
+2. Build the Executable
 
+   Run the following command in PowerShell from the root of your project directory:
+   
+      ```bash
+      pyinstaller --onefile --windowed `
+     --add-data "assets;assets" `
+     --add-data "assets/wordfreq/data/large_en.msgpack.gz;wordfreq/data" `
+     --add-data "wordsearchapp.kv;." `
+     --hidden-import=win32timezone `
+     --hidden-import=pywintypes `
+     main.py
 
-
+3. After the build completes, your .exe file will be located in the dist/ directory:

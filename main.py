@@ -17,7 +17,7 @@ from kivy.resources import resource_find
 from kivy.lang import Builder
 
 
-kivy.require('1.9.0')
+# kivy.require('1.9.0')
 
 if platform in ('win', 'linux', 'macosx'):
     # Set window size for desktop

@@ -1,6 +1,6 @@
 import fitz 
 import re
-import nltk
+
 import difflib
 import os
 import sys
@@ -19,16 +19,6 @@ from reportlab.lib.pagesizes import A4
 from textwrap import wrap
 from kivy.resources import resource_find
 
-
-nltk_path = resource_find("assets/nltk_data")
-if nltk_path:
-    nltk.data.path.append(nltk_path)
-    print(f"NLTK data path set to: {nltk_path}")
-else:
-    print("nltk_data not found, fallback to download.")
-    nltk.download("punkt")
-    nltk.download("wordnet")
-    nltk.download("omw-1.4")
 
 
 from kivy.uix.popup import Popup
@@ -252,12 +242,6 @@ def load_word_definitions(file_path="difficult_words_definitions.txt"):
     return word_definitions
 
 
-proficiency_settings = {
-    "Low": {"local_limit": 70, "global_freq_limit": 1e-5, "common_word_lower_limit": 100},
-    "Medium": {"local_limit": 45, "global_freq_limit": 1e-6, "common_word_lower_limit": 75},
-    "High": {"local_limit": 30, "global_freq_limit": 1e-7, "common_word_lower_limit": 40}
-}
-
 
 def open_filechooser(upload_callback):
     content = FileChooserListView(filters=["*.pdf"])
@@ -273,8 +257,14 @@ def open_filechooser(upload_callback):
     popup.open()
 
 
-
 def upload_and_process_pdf(proficiency_level,pdf_path, output_box, book_label):
+    
+    proficiency_settings = {
+        "Low": {"local_limit": 70, "global_freq_limit": 1e-5, "common_word_lower_limit": 100},
+        "Medium": {"local_limit": 45, "global_freq_limit": 1e-6, "common_word_lower_limit": 75},
+        "High": {"local_limit": 30, "global_freq_limit": 1e-7, "common_word_lower_limit": 40}
+    }
+
     app_dir = App.get_running_app().user_data_dir
     common_words_file_path = os.path.join(app_dir, "common_words.txt")
     try:
